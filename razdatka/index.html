@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Раздатка администратора</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f2f2f2; --paper:#ffffff; --ink:#111; --muted:#666; --line:#d9d9d9; --gold:#c8af6d; --gold-d:#8f7232; --bad:#c9392f; --ok:#2f8a5f; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0b0b0b; --paper:#151515; --ink:#f3f3f3; --muted:#a8a8a8; --line:#333; --gold-d:#d8bf7e; } }
+  :root[data-theme="dark"] { --bg:#0b0b0b; --paper:#151515; --ink:#f3f3f3; --muted:#a8a8a8; --line:#333; --gold-d:#d8bf7e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:Montserrat, system-ui, sans-serif; font-size:13px; line-height:1.4; }
+  .bar { position:sticky; top:0; z-index:2; display:flex; gap:10px; align-items:center; justify-content:center; padding:10px 16px; background:var(--bg); }
+  .bar button { font:inherit; font-weight:700; border:2px solid var(--gold); background:var(--gold); color:#111; padding:8px 16px; border-radius:2px; cursor:pointer; }
+  .bar button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  .page { width:min(210mm, calc(100% - 32px)); margin:0 auto 16px; background:var(--paper); padding:12mm 12mm; border:1px solid var(--line); }
+  .head { display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--gold); padding-bottom:6px; margin-bottom:10px; }
+  .head b { font-family:Philosopher, Georgia, serif; letter-spacing:.3em; color:var(--gold-d); font-size:12px; }
+  h1 { font-family:Philosopher, Georgia, serif; font-size:26px; margin:0 0 4px; }
+  h2 { font-family:Philosopher, Georgia, serif; font-size:17px; margin:12px 0 6px; color:var(--gold-d); }
+  p { margin:0 0 6px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { border:1px solid var(--line); padding:6px 7px; text-align:left; vertical-align:top; }
+  th { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .blank td { height:34px; }
+  .q { border-left:4px solid var(--gold); padding:6px 10px; margin:0 0 7px; background:color-mix(in srgb, var(--gold) 10%, transparent); }
+  .q small { display:block; font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  ul { margin:0; padding-left:18px; } li { margin-bottom:3px; }
+  .no li::marker { content:"✕  "; color:var(--bad); }
+  .ok li::marker { content:"✓  "; color:var(--ok); }
+  .sum { display:flex; gap:10px; margin-top:8px; }
+  .sum div { flex:1; border:1px solid var(--line); padding:8px; font-weight:700; }
+  @media (max-width:640px) { .two { grid-template-columns:1fr; } .page { padding:16px; } table { font-size:11px; } }
+  @media print {
+    @page { size:A4; margin:10mm; }
+    body { background:#fff; color:#111; font-size:12px; }
+    .bar { display:none; }
+    .page { width:auto; margin:0; border:0; padding:0; page-break-after:always; background:#fff; }
+    .page:last-child { page-break-after:auto; }
+  }
+</style></head>
+<body>
+<div class="bar"><button onclick="window.print()">🖨 Распечатать</button><span style="color:var(--muted)">4 листа А4 · по 1 комплекту на администратора</span></div>
+
+<section class="page">
+  <div class="head"><h1>Мои действия на 3 дня вперёд</h1><b>МОНРО</b></div>
+  <p>Студия: ____________ &nbsp; Администратор: ____________ &nbsp; Дни: ____________</p>
+  <p style="color:var(--muted)">Откройте Арнику: записанные гости на завтра и послезавтра + мастера с окнами 3+ часа. Имя гостя пишем только здесь, на листе.</p>
+  <table class="blank">
+    <tr><th style="width:9%">День</th><th style="width:17%">Гость</th><th style="width:15%">Записан на</th><th style="width:19%">Свободный мастер рядом (время)</th><th style="width:17%">Что предлагаю</th><th style="width:11%">Итог ✓/✕</th><th style="width:12%">+₽</th></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <h2>Пустые мастера на смене → наши гости бесплатно</h2>
+  <table class="blank">
+    <tr><th style="width:12%">День</th><th style="width:25%">Мастер (должность)</th><th style="width:18%">Свободно, ч</th><th>Кого ведём (постоянный гость / сотрудник)</th><th style="width:12%">Итог</th></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <div class="sum"><div>Предложил услугу: ___</div><div>Согласились: ___</div><div>Записал вперёд: ___</div><div>+₽ итого: ______</div></div>
+</section>
+
+<section class="page">
+  <div class="head"><h1>Карточка у телефона: скрипты</h1><b>МОНРО</b></div>
+  <div class="q"><small>Подтверждение + ещё услуга (14:30–16:00)</small>«[Имя], здравствуйте, это Монро. Подтверждаю вас на завтра в 15:00 на стрижку. Кстати, у мастера маникюра окно в 16:00, сразу после вас. Записать?»</div>
+  <div class="q"><small>Гость пришёл и ждёт мастера</small>«[Имя], пока вы у мастера — у бровиста окно сразу после вас, 20 минут. Поставить, чтобы не приезжать отдельно?»</div>
+  <div class="q"><small>Касса — запись вперёд</small>«Давайте сразу закрепим следующий визит, через 3–4 недели. Вам удобно так же, в четверг в 18:00? Если что-то изменится — перенесём».</div>
+  <div class="q"><small>Новый гость у топа на простую услугу</small>«Вам принципиально именно к этому мастеру? Если нет — запишу к очень хорошему мастеру и раньше, завтра в 12:00».</div>
+  <div class="q"><small>Недовольный гость</small>«Мне очень жаль. Давайте исправим бесплатно — у нас есть сильный мастер, завтра в 12:00 или в субботу?»</div>
+  <div class="q"><small>Мастер ушёл</small>«[Имя], [мастер] у нас больше не работает, но ваша история сохранена. Я подобрала мастера, который работает так же, первый визит к ней — бесплатно. Есть вторник в 15:00?»</div>
+  <h2>Возражения</h2>
+  <table>
+    <tr><th style="width:30%">Гость говорит</th><th>Отвечаем</th></tr>
+    <tr><td>«Дорого»</td><td>«Понимаю. Могу подобрать мастера другого уровня — дешевле. И на этой неделе есть акция: … (акции — в группе «Маркетинг» по понедельникам)»</td></tr>
+    <tr><td>«Хочу только к своему мастеру»</td><td>«Конечно. Ближайшее окно у неё — четверг 18:00, записываю. Если захотите раньше — есть мастер её уровня завтра в 12:00»</td></tr>
+    <tr><td>«Некогда»</td><td>«Поэтому и предлагаю рядом с вашей записью — 20–30 минут, без отдельной поездки»</td></tr>
+    <tr><td>«Подумаю»</td><td>«Давайте я поставлю время, чтобы его не заняли, и напомню накануне. Передумаете — просто напишите»</td></tr>
+    <tr><td>«Уже пробовала, не понравилось»</td><td>«Жаль. Что было не так? … Подберу другого мастера, первый раз исправим бесплатно»</td></tr>
+    <tr><td>«Не звоните мне»</td><td>«Хорошо, больше не побеспокоим». → пометка в Арнике, убираем из обзвона</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <div class="head"><h1>Мой день и правила</h1><b>МОНРО</b></div>
+  <div class="two">
+    <div>
+      <h2>Смотрим на 3 дня вперёд</h2>
+      <ul><li>Среда → четверг, пятница</li><li>Пятница → понедельник</li><li>Суббота → вторник</li><li>Выходные заполняются сами</li><li>Дальше 3 дней — колл-центр</li></ul>
+      <h2>Отметки в чат</h2>
+      <ul><li><b>11:00</b> — сколько окон сегодня и на 3 дня, кому звоним</li><li><b>16:00</b> — сколько подтвердили, скольким предложили ещё услугу</li><li><b>19:00</b> — сколько окон закрыли, сколько записали вперёд, недовольные</li></ul>
+      <h2>Каждый день — минимум</h2>
+      <ul class="ok"><li>Все гости на завтра подтверждены + 10 предложений ещё услуги</li><li>5 гостей записаны вперёд на кассе</li><li>2 пустых мастера заполнены своими гостями</li></ul>
+    </div>
+    <div>
+      <h2>Правила расписания</h2>
+      <ul class="ok"><li>Смена — только на часы, когда мастер в студии (пришёл в 13:00 → смена 13:00–21:00, не «перерыв»)</li><li>Перерыв — только обед; в каждый час хотя бы один мастер свободен</li><li>У каждого работающего мастера галочка онлайн-записи</li><li>График на следующий месяц — внести в Арнику до 10 числа</li><li>Основному мастеру — 60% записей, новые гости — к новым мастерам</li><li>Кабинет — запись каждый день</li><li>2 парикмахера загружены на 50% — зовём доп. мастера</li></ul>
+      <h2>Бесплатно — только так</h2>
+      <ul class="ok"><li>Мастер на смене «Р» пустой (минимум ему платим всё равно)</li><li>Постоянный гость (2+ платных визита) или наш сотрудник</li><li>Только окно сегодня–завтра, не больше 2 гостей на мастера</li><li>В Арнике пометка «бесплатно — пустая смена»</li></ul>
+      <ul class="no"><li>Не «халявщики» из чатов бесплатных услуг</li></ul>
+    </div>
+  </div>
+  <h2>Что нельзя делать с гостем</h2>
+  <ul class="no"><li>Не встать и не поздороваться по имени</li><li>«Ты» и уменьшительные имена</li><li>Оставить звонок или сообщение без ответа дольше 5–10 минут</li><li>Заменить мастера или сдвинуть время без предупреждения</li><li>Цена «примерно», а взяли больше</li><li>Давить и продавать «в лоб»</li><li>Спорить с недовольным, винить мастера</li><li>Обсуждать при гостях других гостей и мастеров</li></ul>
+</section>
+
+<section class="page">
+  <div class="head"><h1>Мастера и к кому идти</h1><b>МОНРО</b></div>
+  <h2>К кому идти</h2>
+  <table>
+    <tr><th style="width:30%">Кто</th><th>Вопросы</th></tr>
+    <tr><td><b>Старший мастер направления</b></td><td>Всё профессиональное: мебель и оборудование, материалы и инструменты, опытные и новые мастера, стажировка и повышение квалификации, качество услуг</td></tr>
+    <tr><td>Управляющая студией</td><td>Графики, опоздания и невыходы, конфликты, бесплатные услуги, решения по мастерам</td></tr>
+    <tr><td>HRD</td><td>Спецодежда, бейджи, справки, зарплата, карьерный рост</td></tr>
+    <tr><td>Финансовый директор</td><td>Касса не сошлась за 15 минут, счета поставщикам</td></tr>
+    <tr><td>Маркетолог</td><td>Акции (каждый пн в группе «Маркетинг»), недовольные гости, отзывы, колл-центр</td></tr>
+  </table>
+  <h2>Путь мастера — проверяю</h2>
+  <div class="two">
+    <ul class="ok"><li>Пришёл за 15 минут до первого гостя</li><li>Форма: футболка, бейдж, фартук, тёмные брюки, закрытая обувь, волосы собраны</li><li>Проверил оборудование и воду</li><li>Чай/кофе каждому гостю, ТВ включён</li></ul>
+    <ul class="ok"><li>Цену обсудил до начала работы</li><li>Проводил гостя ко мне, записал к себе вперёд, назвал услуги</li><li>Фото работы в рабочий чат</li><li>Убрал своё место сам</li></ul>
+  </div>
+  <h2>Раз в месяц: 5 вопросов про мастера</h2>
+  <table class="blank">
+    <tr><th style="width:24%">Мастер</th><th>Вовремя и в форме</th><th>Гости довольны</th><th>Гости возвращаются</th><th>Записывает вперёд</th><th>Советует уход и мастеров</th><th style="width:9%">«Да»</th></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <p style="margin-top:6px"><b>5–4 «да»</b> — новых гостей и недовольных к нему · <b>3</b> — свои гости, разбор со старшим мастером · <b>0–2</b> — новых не даём, решает управляющая</p>
+</section>
+</body></html>
