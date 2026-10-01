@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Монро · задачи УК</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f2f2;--card:#fff;--ink:#111;--muted:#6b6b6b;--line:#e3e3e3;--gold:#c8af6d;--gold-d:#8f7232;--bad:#d4493f;--bad-bg:#fde7e4;--ok:#2f8a5f;--ok-bg:#e3f2ea;--warn:#b8913c;--warn-bg:#f6efdc;--blue:#3b6fb6;--blue-bg:#e6eef9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0b0b;--card:#171717;--ink:#f3f3f3;--muted:#a3a3a3;--line:#2c2c2c;--gold-d:#d8bf7e;--bad:#f2766b;--bad-bg:#3a1d1a;--ok:#5cc394;--ok-bg:#14301f;--warn:#e0bd6a;--warn-bg:#342a15;--blue:#8db2ea;--blue-bg:#1b2840}}
+:root[data-theme="dark"]{--bg:#0b0b0b;--card:#171717;--ink:#f3f3f3;--muted:#a3a3a3;--line:#2c2c2c;--gold-d:#d8bf7e;--bad:#f2766b;--bad-bg:#3a1d1a;--ok:#5cc394;--ok-bg:#14301f;--warn:#e0bd6a;--warn-bg:#342a15;--blue:#8db2ea;--blue-bg:#1b2840}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Montserrat,system-ui,sans-serif;font-size:16px;line-height:1.4}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.top{position:sticky;top:0;z-index:5;background:#111;color:#fff;padding:10px 16px calc(10px);display:flex;align-items:center;gap:10px}
+.top h1{font-family:Philosopher,Georgia,serif;font-size:20px;margin:0;flex:1;letter-spacing:.02em}
+.top h1 b{color:var(--gold)}
+.top .who{font-size:13px;color:#cfcfcf}
+.top button{background:none;border:1px solid #444;color:#ddd;border-radius:6px;padding:5px 9px;font-size:13px}
+.tabs{display:flex;gap:4px;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;position:sticky;top:48px;z-index:4}
+.tabs button{border:0;background:none;padding:9px 14px;border-radius:8px;font-weight:700;color:var(--muted);white-space:nowrap}
+.tabs button.on{background:var(--gold);color:#111}
+main{max-width:1200px;margin:0 auto;padding:14px 16px 90px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;background:var(--gold);color:#111}
+.btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.btn.sm{padding:7px 11px;font-size:14px}
+.btn.danger{background:var(--bad-bg);color:var(--bad)}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:11px 12px}
+textarea{min-height:70px;resize:vertical}
+label{font-size:13px;font-weight:700;color:var(--muted);display:block;margin:10px 0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer}
+.card .t{font-weight:700}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:13px}
+.pill{border-radius:99px;padding:3px 9px;background:var(--bg);border:1px solid var(--line);font-weight:600}
+.pill.over{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.pill.today{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.st-new{background:var(--blue-bg);color:var(--blue);border-color:transparent}
+.st-work{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.st-review{background:#efe6f7;color:#7a4aa6;border-color:transparent}
+.st-done{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+h2{font-family:Philosopher,Georgia,serif;font-size:24px;margin:6px 0 12px}
+h3{margin:18px 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.board{display:grid;grid-template-columns:repeat(4,minmax(250px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:color-mix(in srgb,var(--line) 45%,transparent);border-radius:12px;padding:10px}
+.col h4{margin:2px 4px 10px;font-size:14px;display:flex;justify-content:space-between}
+.empty{color:var(--muted);padding:20px 4px;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:flex;justify-content:center;align-items:flex-end}
+@media(min-width:760px){.modal{align-items:center}}
+.sheet{background:var(--card);width:min(720px,100%);max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px 24px}
+@media(min-width:760px){.sheet{border-radius:16px}}
+.sheet .x{float:right;border:0;background:var(--bg);border-radius:50%;width:36px;height:36px;font-size:18px}
+.stbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.stbtns button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 4px;font-weight:700;font-size:13px}
+.stbtns button.on{border-color:transparent}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+.chk{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.chk input{width:22px;height:22px}
+.chk span{flex:1}
+.msg{padding:9px 11px;border-radius:10px;background:var(--bg);margin-bottom:6px;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
+.msg small{display:block;color:var(--muted);font-size:12px;font-weight:600;margin-bottom:2px}
+.msg.sys{background:none;padding:2px 11px;color:var(--muted);font-size:13px}
+.login{max-width:380px;margin:8vh auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.login h2{text-align:center}
+.err{color:var(--bad);font-weight:600;min-height:1.3em;margin-top:8px}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));border:0;background:#111;color:var(--gold);border-radius:99px;padding:14px 20px;font-weight:800;box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:6}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{font-family:Philosopher,Georgia,serif;font-size:30px;display:block}
+.who-row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.muted{color:var(--muted);font-size:14px}
+</style></head>
+<body>
+<div id="app"></div>
+<script>
+const URL_='https://gclzorcutlwaeuerjuce.supabase.co/rest/v1/rpc/', KEY='sb_publishable_JacPByVFb4KuAbCTA3XZKA_B4YzQIdI';
+const ST={new:'Новая',work:'В работе',review:'На проверке',done:'Готово'};
+const S={token:null,me:null,users:[],tasks:[],tab:'my',filter:'all'};
+try{S.token=localStorage.getItem('uk_token')}catch(e){}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=s=>document.querySelector(s);
+async function rpc(fn,args){
+  const r=await fetch(URL_+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(args)});
+  const t=await r.text(); let j=null; try{j=t?JSON.parse(t):null}catch(e){}
+  if(!r.ok){const m=(j&&j.message)||t; if(m.includes('AUTH')){logout(true)} throw new Error(m)}
+  return j;
+}
+const ERR={NO_USER:'Этот номер не найден. Попросите собственника добавить вас.',BAD_PIN:'Неверный PIN-код.',LOCKED:'Слишком много попыток. Подождите 15 минут.',PIN_FORMAT:'PIN — 4 цифры.',BAD_CODE:'Неверный код настройки.',FORBIDDEN:'Нет прав.'};
+const errText=e=>{for(const k in ERR) if(e.message.includes(k)) return ERR[k]; return 'Ошибка связи. Попробуйте ещё раз.'};
+const uname=id=>(S.users.find(u=>u.id===id)||{}).name||'—';
+const today=()=>new Date().toISOString().slice(0,10);
+function dueInfo(t){
+  if(t.due){const d=new Date(t.due+'T00:00'); const txt=d.toLocaleDateString('ru',{day:'numeric',month:'short'});
+    if(t.status!=='done'&&t.due<today()) return {txt:'просрочено · '+txt,cls:'over'};
+    if(t.status!=='done'&&t.due===today()) return {txt:'сегодня',cls:'today'};
+    return {txt:'до '+txt,cls:''}}
+  return t.due_text?{txt:t.due_text,cls:''}:null;
+}
+function cardHTML(t){const d=dueInfo(t);
+  return `<div class="card" data-id="${t.id}" role="button" tabindex="0"><div class="t">${esc(t.title)}</div><div class="meta">
+  <span class="pill st-${t.status}">${ST[t.status]}</span><span class="pill">👤 ${esc(uname(t.assignee_id))}</span>
+  ${d?`<span class="pill ${d.cls}">⏰ ${esc(d.txt)}</span>`:''}${t.comments>1?`<span class="pill">💬 ${t.comments-1}</span>`:''}
+  ${(t.checklist||[]).length?`<span class="pill">☑ ${t.checklist.filter(c=>c.d).length}/${t.checklist.length}</span>`:''}</div></div>`}
+const sortTasks=a=>a.slice().sort((x,y)=>{const o=t=>t.due&&t.due<today()&&t.status!=='done'?0:t.due?1:2; return o(x)-o(y)||(x.due||'9').localeCompare(y.due||'9')||x.id-y.id});
+
+function logout(silent){if(S.token&&!silent) rpc('uk_logout',{p_token:S.token}).catch(()=>{}); S.token=null; try{localStorage.removeItem('uk_token')}catch(e){} renderLogin()}
+
+function renderLogin(setup){
+  $('#app').innerHTML=`<div class="login"><h2>Монро · <span style="color:var(--gold-d)">задачи УК</span></h2>
+  ${setup?`<p class="muted">Первый вход собственника: введите код настройки, свой телефон и придумайте PIN.</p><label for="code">Код настройки</label><input id="code" inputmode="numeric" autocomplete="one-time-code">`:''}
+  <label for="ph">Телефон</label><input id="ph" type="tel" inputmode="tel" placeholder="+7 900 000-00-00" autocomplete="tel">
+  <label for="pin">PIN-код (4 цифры)</label><input id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password">
+  <p class="muted">При первом входе PIN, который вы введёте, станет вашим.</p>
+  <button class="btn" id="go" style="width:100%;margin-top:6px">Войти</button><div class="err" id="err"></div>
+  <p style="text-align:center"><button class="btn ghost sm" id="sw">${setup?'Обычный вход':'Первый вход собственника'}</button></p></div>`;
+  $('#sw').onclick=()=>renderLogin(!setup);
+  $('#go').onclick=async()=>{ $('#err').textContent='';
+    try{const r=setup?await rpc('uk_setup',{p_code:$('#code').value.trim(),p_phone:$('#ph').value,p_pin:$('#pin').value.trim()})
+                     :await rpc('uk_login',{p_phone:$('#ph').value,p_pin:$('#pin').value.trim()});
+      S.token=r.token; try{localStorage.setItem('uk_token',r.token)}catch(e){} start();
+    }catch(e){$('#err').textContent=errText(e)} };
+  $('#pin').onkeydown=e=>{if(e.key==='Enter')$('#go').click()};
+}
+
+async function load(){[S.users,S.tasks]=await Promise.all([rpc('uk_users',{p_token:S.token}),rpc('uk_tasks',{p_token:S.token})])}
+async function start(){
+  try{S.me=await rpc('uk_me',{p_token:S.token}); await load()}catch(e){return}
+  $('#app').innerHTML=`<div class="top"><h1>Монро · <b>задачи</b></h1><span class="who">${esc(S.me.name)}</span><button id="out">Выйти</button></div>
+  <nav class="tabs" id="tabs"></nav><main id="main"></main><button class="fab" id="fab">+ Задача</button>`;
+  $('#out').onclick=()=>logout(); $('#fab').onclick=()=>openTask(null);
+  render(); clearInterval(S.poll); S.poll=setInterval(async()=>{if(!$('.modal')){try{await load();render()}catch(e){}}},60000);
+}
+function render(){
+  const tabs=[['my','Мои задачи'],['board','Доска'],['feed','Лента']].concat(S.me.is_owner?[['all','Сводка'],['people','Люди']]:[]);
+  $('#tabs').innerHTML=tabs.map(([k,n])=>`<button class="${S.tab===k?'on':''}" data-t="${k}">${n}</button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;render()});
+  ({my:renderMy,board:renderBoard,feed:renderFeed,all:renderAll,people:renderPeople})[S.tab]();
+  document.querySelectorAll('.card[data-id]').forEach(c=>{c.onclick=()=>openTask(+c.dataset.id);c.onkeydown=e=>{if(e.key==='Enter')openTask(+c.dataset.id)}});
+}
+function renderMy(){
+  const mine=sortTasks(S.tasks.filter(t=>t.status!=='done'&&(t.assignee_id===S.me.id||t.helper_id===S.me.id)));
+  const a=mine.filter(t=>t.assignee_id===S.me.id), h=mine.filter(t=>t.assignee_id!==S.me.id);
+  $('#main').innerHTML=`<h2>Мои задачи</h2>${a.length?a.map(cardHTML).join(''):'<div class="empty">Задач нет 🎉</div>'}
+  ${h.length?`<h3>Помогаю</h3>${h.map(cardHTML).join('')}`:''}`;
+}
+function renderBoard(){
+  const opts=`<option value="all">Все</option>`+S.users.filter(u=>u.active).map(u=>`<option value="${u.id}" ${S.filter==u.id?'selected':''}>${esc(u.name)}</option>`).join('');
+  const list=S.tasks.filter(t=>S.filter==='all'||t.assignee_id==S.filter||t.helper_id==S.filter);
+  $('#main').innerHTML=`<div class="row" style="margin-bottom:12px"><h2 style="margin:0;flex:1">Доска</h2><select id="flt" style="width:auto;min-width:200px" aria-label="Чьи задачи">${opts}</select></div>
+  <div class="board">${Object.keys(ST).map(s=>{const c=sortTasks(list.filter(t=>t.status===s));return `<div class="col"><h4><span>${ST[s]}</span><span>${c.length}</span></h4>${c.map(cardHTML).join('')||'<div class="empty">—</div>'}</div>`}).join('')}</div>`;
+  $('#flt').onchange=e=>{S.filter=e.target.value;render()};
+}
+function renderAll(){
+  const open=S.tasks.filter(t=>t.status!=='done'), over=open.filter(t=>t.due&&t.due<today());
+  const by=S.users.filter(u=>u.active&&!u.is_owner).map(u=>{const m=open.filter(t=>t.assignee_id===u.id);return {u,n:m.length,o:m.filter(t=>t.due&&t.due<today()).length,r:m.filter(t=>t.status==='review').length}});
+  $('#main').innerHTML=`<h2>Сводка</h2><div class="stat"><div><b>${open.length}</b>открыто</div><div><b style="color:var(--bad)">${over.length}</b>просрочено</div>
+  <div><b>${S.tasks.filter(t=>t.status==='review').length}</b>ждут проверки</div><div><b style="color:var(--ok)">${S.tasks.filter(t=>t.status==='done').length}</b>готово за 2 недели</div></div>
+  <h3>По людям</h3>${by.map(x=>`<div class="who-row row"><b style="flex:1">${esc(x.u.name)}</b><span class="pill">${x.n} открыто</span>${x.o?`<span class="pill over">${x.o} просрочено</span>`:''}${x.r?`<span class="pill st-review">${x.r} на проверке</span>`:''}</div>`).join('')}
+  ${over.length?`<h3>Просрочено</h3>${sortTasks(over).map(cardHTML).join('')}`:''}
+  <h3>Ждут вашей проверки</h3>${S.tasks.filter(t=>t.status==='review').map(cardHTML).join('')||'<div class="empty">—</div>'}`;
+}
+async function renderFeed(){
+  $('#main').innerHTML=`<h2>Лента УК</h2><textarea id="post" placeholder="Объявление для всей УК…"></textarea><div class="row" style="margin:8px 0 16px"><button class="btn" id="send">Опубликовать</button></div><div id="fl">Загрузка…</div>`;
+  $('#send').onclick=async()=>{const v=$('#post').value.trim(); if(!v) return; await rpc('uk_feed_add',{p_token:S.token,p_body:v}); renderFeed()};
+  const f=await rpc('uk_feed',{p_token:S.token});
+  $('#fl').innerHTML=f.map(m=>`<div class="msg"><small>${esc(uname(m.user_id))} · ${new Date(m.at).toLocaleString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</small>${esc(m.body)}</div>`).join('')||'<div class="empty">Пока пусто</div>';
+}
+function renderPeople(){
+  $('#main').innerHTML=`<h2>Люди</h2><p class="muted">Имя — должность. Человек входит по телефону; при первом входе сам придумывает PIN.</p>
+  ${S.users.map(u=>`<div class="who-row" data-u="${u.id}"><div class="grid2"><div><label>Должность</label><input class="nm" value="${esc(u.name)}"></div>
+  <div><label>Телефон</label><input class="phn" type="tel" value="${esc(u.phone||'')}" placeholder="не задан"></div></div>
+  <div class="row" style="margin-top:8px"><span class="muted" style="flex:1">${u.is_owner?'Собственник · ':''}${u.has_pin?'PIN задан':'ещё не входил'}${u.active?'':' · отключён'}</span>
+  <button class="btn sm sv">Сохранить</button>${u.has_pin?'<button class="btn ghost sm rp">Сбросить PIN</button>':''}${u.is_owner?'':`<button class="btn ${u.active?'danger':'ghost'} sm ac">${u.active?'Отключить':'Включить'}</button>`}</div></div>`).join('')}
+  <h3>Добавить</h3><div class="who-row"><div class="grid2"><div><label>Должность</label><input id="nn"></div><div><label>Телефон</label><input id="np" type="tel"></div></div><button class="btn" id="add" style="margin-top:10px">Добавить</button></div>`;
+  document.querySelectorAll('[data-u]').forEach(row=>{const id=+row.dataset.u, u=S.users.find(x=>x.id===id);
+    const save=async p=>{await rpc('uk_user_save',{p_token:S.token,p:Object.assign({id},p)}); await load(); renderPeople()};
+    row.querySelector('.sv').onclick=()=>save({name:row.querySelector('.nm').value,phone:row.querySelector('.phn').value});
+    const rp=row.querySelector('.rp'); if(rp) rp.onclick=()=>save({reset_pin:true});
+    const ac=row.querySelector('.ac'); if(ac) ac.onclick=()=>save({active:!u.active});});
+  $('#add').onclick=async()=>{if(!$('#nn').value.trim())return; await rpc('uk_user_save',{p_token:S.token,p:{name:$('#nn').value,phone:$('#np').value}}); await load(); renderPeople()};
+}
+
+async function openTask(id){
+  const t=id?S.tasks.find(x=>x.id===id):{title:'',descr:'',assignee_id:null,helper_id:null,due:null,due_text:'',status:'new',checklist:[],check_how:''};
+  const ck=JSON.parse(JSON.stringify(t.checklist||[]));
+  const uo=sel=>`<option value="">—</option>`+S.users.filter(u=>u.active).map(u=>`<option value="${u.id}" ${sel===u.id?'selected':''}>${esc(u.name)}</option>`).join('');
+  const m=document.createElement('div'); m.className='modal';
+  m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="Задача"><button class="x" aria-label="Закрыть">✕</button>
+  <h2 style="margin-top:2px">${id?'Задача №'+id:'Новая задача'}</h2>
+  <label for="tt">Что сделать</label><textarea id="tt" style="min-height:56px">${esc(t.title)}</textarea>
+  <div class="grid2"><div><label for="ta">Ответственный</label><select id="ta">${uo(t.assignee_id)}</select></div>
+  <div><label for="th">Помогает</label><select id="th">${uo(t.helper_id)}</select></div>
+  <div><label for="td">Срок (дата)</label><input id="td" type="date" value="${t.due||''}"></div>
+  <div><label for="tx">или регулярно</label><input id="tx" value="${esc(t.due_text||'')}" placeholder="ежедневно, каждый пн…"></div></div>
+  ${id?`<label>Статус</label><div class="stbtns">${Object.keys(ST).map(s=>`<button data-s="${s}" class="${t.status===s?'on st-'+s:''}">${ST[s]}</button>`).join('')}</div>`:''}
+  <label for="tc">Как проверить результат</label><input id="tc" value="${esc(t.check_how||'')}">
+  <label for="tds">Подробности</label><textarea id="tds">${esc(t.descr||'')}</textarea>
+  <label>Подпункты</label><div id="ckl"></div><div class="row" style="margin-top:6px"><input id="ckn" placeholder="Новый подпункт" style="flex:1"><button class="btn ghost sm" id="cka">Добавить</button></div>
+  <div class="row" style="margin-top:14px"><button class="btn" id="save">${id?'Сохранить':'Создать задачу'}</button>${id&&S.me.is_owner?'<button class="btn danger sm" id="del">Удалить</button>':''}<span class="err" id="terr"></span></div>
+  ${id?`<h3>Обсуждение и отчёт</h3><div id="cm">Загрузка…</div><textarea id="cmt" placeholder="Написать… (что сделано, вопрос, фото-ссылка)"></textarea><div class="row" style="margin-top:6px"><button class="btn sm" id="cms">Отправить</button></div>`:''}</div>`;
+  document.body.appendChild(m);
+  let status=t.status;
+  const close=()=>{m.remove()}; m.querySelector('.x').onclick=close; m.onclick=e=>{if(e.target===m)close()};
+  document.addEventListener('keydown',function k(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',k)}});
+  const drawCk=()=>{m.querySelector('#ckl').innerHTML=ck.map((c,i)=>`<div class="chk"><input type="checkbox" data-i="${i}" ${c.d?'checked':''} aria-label="Выполнено"><span>${esc(c.t)}</span><button class="btn ghost sm" data-r="${i}" aria-label="Удалить">✕</button></div>`).join('')||'<div class="muted">—</div>';
+    m.querySelectorAll('#ckl input').forEach(x=>x.onchange=()=>{ck[x.dataset.i].d=x.checked});
+    m.querySelectorAll('#ckl [data-r]').forEach(x=>x.onclick=()=>{ck.splice(+x.dataset.r,1);drawCk()})};
+  drawCk(); m.querySelector('#cka').onclick=()=>{const v=m.querySelector('#ckn').value.trim(); if(v){ck.push({t:v,d:false}); m.querySelector('#ckn').value=''; drawCk()}};
+  m.querySelectorAll('.stbtns button').forEach(b=>b.onclick=()=>{status=b.dataset.s; m.querySelectorAll('.stbtns button').forEach(x=>x.className=x.dataset.s===status?'on st-'+status:'')});
+  m.querySelector('#save').onclick=async()=>{const title=m.querySelector('#tt').value.trim(), a=m.querySelector('#ta').value;
+    if(!title||!a){m.querySelector('#terr').textContent='Заполните «что сделать» и ответственного';return}
+    const p={title,assignee_id:+a,helper_id:m.querySelector('#th').value,due:m.querySelector('#td').value,due_text:m.querySelector('#tx').value,check_how:m.querySelector('#tc').value,descr:m.querySelector('#tds').value,checklist:ck};
+    if(id){p.id=id;p.status=status}
+    try{await rpc('uk_task_save',{p_token:S.token,p}); await load(); close(); render()}catch(e){m.querySelector('#terr').textContent=errText(e)}};
+  if(id&&S.me.is_owner) m.querySelector('#del').onclick=async()=>{if(!confirm('Удалить задачу?'))return; await rpc('uk_task_delete',{p_token:S.token,p_id:id}); await load(); close(); render()};
+  if(id){const drawCm=async()=>{const c=await rpc('uk_comments',{p_token:S.token,p_task:id});
+      m.querySelector('#cm').innerHTML=c.map(x=>/^(➕|↪)/.test(x.body)?`<div class="msg sys">${esc(uname(x.user_id))} ${esc(x.body)} · ${new Date(x.at).toLocaleString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>`
+        :`<div class="msg"><small>${esc(uname(x.user_id))} · ${new Date(x.at).toLocaleString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</small>${esc(x.body)}</div>`).join('')};
+    drawCm(); m.querySelector('#cms').onclick=async()=>{const v=m.querySelector('#cmt').value.trim(); if(!v)return; await rpc('uk_comment_add',{p_token:S.token,p_task:id,p_body:v}); m.querySelector('#cmt').value=''; drawCm(); load().then(render)}}
+}
+S.token?start():renderLogin();
+</script>
+</body></html>
