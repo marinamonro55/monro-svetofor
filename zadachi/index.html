@@ -129,6 +129,7 @@ function renderLogin(setup){
 async function load(){[S.users,S.tasks]=await Promise.all([rpc('uk_users',{p_token:S.token}),rpc('uk_tasks',{p_token:S.token})])}
 async function start(){
   try{S.me=await rpc('uk_me',{p_token:S.token}); await load()}catch(e){return}
+  if(S.me.is_owner&&S.tab==='my') S.tab='all';
   $('#app').innerHTML=`<div class="top"><h1>Монро · <b>задачи</b></h1><span class="who">${esc(S.me.name)}</span><button id="out">Выйти</button></div>
   <nav class="tabs" id="tabs"></nav><main id="main"></main><button class="fab" id="fab">+ Задача</button>`;
   $('#out').onclick=()=>logout(); $('#fab').onclick=()=>openTask(null);
