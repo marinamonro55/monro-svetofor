@@ -84,13 +84,13 @@ try{S.token=localStorage.getItem('uk_token')}catch(e){}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $=s=>document.querySelector(s);
 async function rpc(fn,args){
-  const r=await fetch(URL_+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(args)});
+  let r; try{ r=await fetch(URL_+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(args)}); }catch(x){ throw new Error('нет связи с сервером ('+(x.message||x)+')') }
   const t=await r.text(); let j=null; try{j=t?JSON.parse(t):null}catch(e){}
   if(!r.ok){const m=(j&&j.message)||t; if(m.includes('AUTH')){logout(true)} throw new Error(m)}
   return j;
 }
 const ERR={NO_USER:'Этот номер не найден. Попросите собственника добавить вас.',BAD_PIN:'Неверный PIN-код.',LOCKED:'Слишком много попыток. Подождите 15 минут.',PIN_FORMAT:'PIN — 4 цифры.',BAD_CODE:'Неверный код настройки.',FORBIDDEN:'Нет прав.'};
-const errText=e=>{for(const k in ERR) if(e.message.includes(k)) return ERR[k]; return 'Ошибка связи. Попробуйте ещё раз.'};
+const errText=e=>{for(const k in ERR) if(e.message.includes(k)) return ERR[k]; return 'Ошибка связи: '+String(e.message||e).slice(0,120)};
 const uname=id=>(S.users.find(u=>u.id===id)||{}).name||'—';
 const today=()=>new Date().toISOString().slice(0,10);
 function dueInfo(t){
