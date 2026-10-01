@@ -136,10 +136,10 @@ async function start(){
   render(); clearInterval(S.poll); S.poll=setInterval(async()=>{if(!$('.modal')){try{await load();render()}catch(e){}}},60000);
 }
 function render(){
-  const tabs=[['my','Мои задачи'],['board','Доска'],['feed','Лента']].concat(S.me.is_owner?[['all','Сводка'],['people','Люди']]:[]);
+  const tabs=[['my','Мои задачи'],['board','Доска'],['duty','Чек-лист'],['feed','Лента']].concat(S.me.see_svet?[['svet','Светофор']]:[]).concat(S.me.is_owner?[['all','Сводка'],['people','Люди']]:[]);
   $('#tabs').innerHTML=tabs.map(([k,n])=>`<button class="${S.tab===k?'on':''}" data-t="${k}">${n}</button>`).join('');
   $('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;render()});
-  ({my:renderMy,board:renderBoard,feed:renderFeed,all:renderAll,people:renderPeople})[S.tab]();
+  ({my:renderMy,board:renderBoard,duty:renderDuty,svet:renderSvet,feed:renderFeed,all:renderAll,people:renderPeople})[S.tab]();
   document.querySelectorAll('.card[data-id]').forEach(c=>{c.onclick=()=>openTask(+c.dataset.id);c.onkeydown=e=>{if(e.key==='Enter')openTask(+c.dataset.id)}});
 }
 function renderMy(){
@@ -163,6 +163,21 @@ function renderAll(){
   <h3>По людям</h3>${by.map(x=>`<div class="who-row row"><b style="flex:1">${esc(x.u.name)}</b><span class="pill">${x.n} открыто</span>${x.o?`<span class="pill over">${x.o} просрочено</span>`:''}${x.r?`<span class="pill st-review">${x.r} на проверке</span>`:''}</div>`).join('')}
   ${over.length?`<h3>Просрочено</h3>${sortTasks(over).map(cardHTML).join('')}`:''}
   <h3>Ждут вашей проверки</h3>${S.tasks.filter(t=>t.status==='review').map(cardHTML).join('')||'<div class="empty">—</div>'}`;
+}
+async function renderDuty(){
+  $('#main').innerHTML='<h2>Чек-лист</h2><div id="dl">Загрузка…</div>';
+  const d=await rpc('uk_duties',{p_token:S.token}); const by={};
+  d.forEach(x=>{(by[x.user_id]=by[x.user_id]||[]).push(x)});
+  $('#dl').innerHTML=Object.keys(by).length?Object.entries(by).map(([uid,list])=>{const per={};list.forEach(x=>{(per[x.period]=per[x.period]||[]).push(x.body)});
+    return (S.me.is_owner?'<h3>'+esc(uname(+uid))+'</h3>':'')+Object.entries(per).map(([p,items])=>'<div class="who-row"><b>'+esc(p)+'</b><ul style="margin:6px 0 0;padding-left:20px">'+items.map(i=>'<li style="margin:4px 0">'+esc(i)+'</li>').join('')+'</ul></div>').join('')}).join(''):'<div class="empty">Чек-листа пока нет</div>';
+}
+const SN={kirova:'Кирова',mendeleeva:'Менделеева',krupskoy:'Крупской',lenina:'Ленина',pereleta:'Перелёта',zavertyaeva:'Завертяева'};
+const arr=(a,b)=>a==null||b==null?'':(+a>+b?' <span style="color:var(--ok)">↑</span>':+a<+b?' <span style="color:var(--bad)">↓</span>':'');
+async function renderSvet(){
+  $('#main').innerHTML='<h2>Светофор</h2><div id="sv">Загрузка…</div>';
+  const s=await rpc('uk_svetofor',{p_token:S.token});
+  const d=x=>x?new Date(x+'T00:00').toLocaleDateString('ru',{day:'numeric',month:'long'}):'—';
+  $('#sv').innerHTML='<p class="muted">Отчёт '+d(s.date)+(s.prev_date?' · стрелки к '+d(s.prev_date):'')+'</p>'+s.rows.map(r=>'<div class="who-row"><div class="row"><b style="flex:1;font-size:18px">'+r.status+' '+esc(SN[r.studio]||r.studio)+'</b><span class="pill">'+Math.round(r.pace/1000).toLocaleString('ru')+' тыс ₽/мес</span><span class="pill '+(+r.plan_pct<85?'over':+r.plan_pct<95?'today':'st-done')+'">'+r.plan_pct+'% плана'+arr(r.plan_pct,r.prev_plan_pct)+'</span></div><div class="meta">'+(r.vs_summer!=null?'<span class="pill">к лету '+r.vs_summer+'%</span>':'')+'<span class="pill">загрузка '+r.load+'%'+arr(r.load,r.prev_load)+'</span>'+(r.hair!=null?'<span class="pill">удержание: волосы '+r.hair+'% · ногти '+r.nails+'% · брови '+r.brows+'%</span>':'')+'<span class="pill">новых '+r.new+'</span><span class="pill">потеряно '+r.lost+'</span></div></div>').join('')+'<p class="muted">Задачи по проблемам Светофора — на доске у управляющих.</p>';
 }
 async function renderFeed(){
   $('#main').innerHTML=`<h2>Лента УК</h2><textarea id="post" placeholder="Объявление для всей УК…"></textarea><div class="row" style="margin:8px 0 16px"><button class="btn" id="send">Опубликовать</button></div><div id="fl">Загрузка…</div>`;
